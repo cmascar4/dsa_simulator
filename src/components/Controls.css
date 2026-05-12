@@ -184,6 +184,40 @@
   opacity: 0.7;
 }
 
+.speed-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-speed {
+  flex: 1;
+  padding: 10px 0;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  background: white;
+  color: #667eea;
+  font-size: 1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-speed:hover:not(:disabled) {
+  background: #f0f3ff;
+}
+
+.btn-speed.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+}
+
+.btn-speed:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .tree-ops {
   display: flex;
   gap: 8px;

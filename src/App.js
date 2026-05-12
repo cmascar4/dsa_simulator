@@ -10,7 +10,7 @@ function App() {
   const [arraySize, setArraySize] = useState(20);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('bubble');
   const [isRunning, setIsRunning] = useState(false);
-  const [speed, setSpeed] = useState(100);
+  const [speed, setSpeed] = useState(2);
   const [treeOperation, setTreeOperation] = useState(null);
 
   const isTreeMode = TREE_ALGORITHMS.includes(selectedAlgorithm);

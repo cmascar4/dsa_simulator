@@ -34,7 +34,7 @@ function Controls({
 
   const handleTreeOp = (op) => {
     const val = parseInt(treeValue, 10);
-    if (isNaN(val) || val < 1 || val > 999) return;
+    if (isNaN(val) || val < 1 || val > 99) return;
     onTreeOperation(op, val);
     setTreeValue('');
   };
@@ -48,7 +48,8 @@ function Controls({
     { label: 'Tree Structures', ids: ['bst', 'rbt'] },
   ];
 
-  const isValueValid = treeValue !== '' && !isNaN(parseInt(treeValue, 10));
+  const parsedVal = parseInt(treeValue, 10);
+  const isValueValid = treeValue !== '' && !isNaN(parsedVal) && parsedVal >= 1 && parsedVal <= 99;
 
   return (
     <aside className="controls">
@@ -78,7 +79,7 @@ function Controls({
         {isTreeMode ? (
           <>
             <div className="control-group">
-              <label htmlFor="tree-value">Value (1–999):</label>
+              <label htmlFor="tree-value">Value (1–99):</label>
               <input
                 id="tree-value"
                 type="number"
@@ -88,7 +89,7 @@ function Controls({
                 onKeyDown={handleKeyDown}
                 disabled={isRunning}
                 min="1"
-                max="999"
+                max="99"
                 placeholder="Enter a number"
               />
             </div>
@@ -120,25 +121,25 @@ function Controls({
             </div>
 
             <div className="control-group">
-              <label htmlFor="speed-tree">
-                Speed: <span className="value">{speed}%</span>
-              </label>
-              <input
-                id="speed-tree"
-                type="range"
-                min="10"
-                max="500"
-                value={speed}
-                onChange={(e) => setSpeed(Number(e.target.value))}
-                step="10"
-                className="slider"
-              />
+              <label>Speed:</label>
+              <div className="speed-buttons">
+                {[1, 2, 3].map((s) => (
+                  <button
+                    key={s}
+                    className={`btn btn-speed ${speed === s ? 'active' : ''}`}
+                    onClick={() => setSpeed(s)}
+                    disabled={isRunning}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="info-section">
               <h3>Instructions</h3>
               <ul>
-                <li>Enter a number (1–999)</li>
+                <li>Enter a number (1–99)</li>
                 <li>Click Insert to add to the tree</li>
                 <li>Click Search to find a value</li>
                 {selectedAlgorithm === 'bst' && <li>Click Delete to remove a value</li>}

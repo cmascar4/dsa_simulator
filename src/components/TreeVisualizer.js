@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './TreeVisualizer.css';
-import { bstInsert, bstSearch, bstDelete, RedBlackTree } from '../algorithms/treeAlgorithms';
+import { bstInsertSteps, bstSearchSteps, bstDeleteSteps, RedBlackTree } from '../algorithms/treeAlgorithms';
 
 const NODE_RADIUS = 22;
 const V_SPACING = 80;
@@ -19,10 +19,16 @@ const ALGO_INFO = {
   },
 };
 
+const SPEED_DELAYS = { 1: 3000, 2: 2000, 3: 1000 };
+
 function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
   const treeRef = useRef(null);
   const [snapshot, setSnapshot] = useState({ nodes: [], edges: [], message: '' });
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [steps, setSteps] = useState([]);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasSteps, setHasSteps] = useState(false);
+  const isPlayingRef = useRef(false);
 
   // Reset tree when type changes
   useEffect(() => {
@@ -32,51 +38,124 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
       treeRef.current = new RedBlackTree();
     }
     setSnapshot({ nodes: [], edges: [], message: '' });
+    setSteps([]);
+    setStepIndex(0);
+    setIsPlaying(false);
+    setHasSteps(false);
   }, [treeType]);
 
-  // Run tree operation
+  // Collect steps when a new operation fires
   useEffect(() => {
     if (!operation) return;
 
-    const run = async () => {
-      setIsAnimating(true);
-      const { op, value } = operation;
+    const { op, value } = operation;
+    let result;
 
-      try {
-        if (treeType === 'bst') {
-          if (op === 'insert') {
-            treeRef.current = await bstInsert(treeRef.current, value, setSnapshot, speed);
-          } else if (op === 'search') {
-            await bstSearch(treeRef.current, value, setSnapshot, speed);
-          } else if (op === 'delete') {
-            treeRef.current = await bstDelete(treeRef.current, value, setSnapshot, speed);
-          }
-        } else {
-          if (op === 'insert') {
-            await treeRef.current.insert(value, setSnapshot, speed);
-          } else if (op === 'search') {
-            await treeRef.current.search(value, setSnapshot, speed);
-          }
+    try {
+      if (treeType === 'bst') {
+        if (op === 'insert') {
+          result = bstInsertSteps(treeRef.current, value);
+          treeRef.current = result.newRoot;
+        } else if (op === 'search') {
+          result = bstSearchSteps(treeRef.current, value);
+        } else if (op === 'delete') {
+          result = bstDeleteSteps(treeRef.current, value);
+          treeRef.current = result.newRoot;
         }
-      } catch (err) {
-        console.error('Tree operation error:', err);
+      } else {
+        if (op === 'insert') {
+          result = treeRef.current.insertSteps(value);
+        } else if (op === 'search') {
+          result = treeRef.current.searchSteps(value);
+        }
       }
+    } catch (err) {
+      console.error('Tree operation error:', err);
+    }
 
-      setIsAnimating(false);
+    if (result && result.steps.length > 0) {
+      setSteps(result.steps);
+      setStepIndex(0);
+      setSnapshot(result.steps[0]);
+      setHasSteps(true);
+      setIsPlaying(true);
+    } else {
       onOperationComplete();
-    };
-
-    run();
+    }
   }, [operation]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Keep ref in sync for the timeout callback
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
+  // Auto-play: advance one step at a time
+  useEffect(() => {
+    if (!isPlaying || steps.length === 0) return;
+
+    const delay = SPEED_DELAYS[speed] ?? 600;
+    const timer = setTimeout(() => {
+      if (!isPlayingRef.current) return;
+      setStepIndex((i) => {
+        const next = i + 1;
+        if (next < steps.length) {
+          setSnapshot(steps[next]);
+          return next;
+        } else {
+          setIsPlaying(false);
+          onOperationComplete();
+          return i;
+        }
+      });
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [isPlaying, stepIndex, steps, speed]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleNext = () => {
+    if (stepIndex < steps.length - 1) {
+      setIsPlaying(false);
+      const next = stepIndex + 1;
+      setStepIndex(next);
+      setSnapshot(steps[next]);
+      if (next === steps.length - 1) {
+        onOperationComplete();
+      }
+    }
+  };
+
+  const handlePrev = () => {
+    if (stepIndex > 0) {
+      setIsPlaying(false);
+      const prev = stepIndex - 1;
+      setStepIndex(prev);
+      setSnapshot(steps[prev]);
+    }
+  };
+
+  const handlePlayPause = () => {
+    if (stepIndex >= steps.length - 1) {
+      // Replay from start
+      setStepIndex(0);
+      setSnapshot(steps[0]);
+      setIsPlaying(true);
+    } else {
+      setIsPlaying((p) => !p);
+    }
+  };
+
   const clearTree = () => {
-    if (isAnimating) return;
+    if (isPlaying) return;
     if (treeType === 'bst') {
       treeRef.current = null;
     } else {
       treeRef.current = new RedBlackTree();
     }
     setSnapshot({ nodes: [], edges: [], message: '' });
+    setSteps([]);
+    setStepIndex(0);
+    setIsPlaying(false);
+    setHasSteps(false);
   };
 
   // ---- Layout ----
@@ -97,6 +176,8 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
   const maxDepth = nodeCount > 0 ? Math.max(...nodes.map((n) => n.layoutY)) : 0;
   const svgHeight = Math.max(200, (maxDepth + 1) * V_SPACING + PADDING * 2 + NODE_RADIUS);
 
+  const RED = 'red';
+
   const getNodeFill = (node) => {
     if (node.state === 'comparing') return '#ff9800';
     if (node.state === 'found') return '#4caf50';
@@ -116,8 +197,8 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
     return 'rgba(0,0,0,0.2)';
   };
 
-  const RED = 'red';
   const info = ALGO_INFO[treeType];
+  const atEnd = stepIndex >= steps.length - 1;
 
   return (
     <div className="tree-visualizer">
@@ -134,7 +215,6 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
         ) : (
           <div className="svg-scroll-wrapper">
             <svg width={svgWidth} height={svgHeight} aria-label={`${info.title} visualization`}>
-              {/* Edges */}
               {edges.map((e, i) => {
                 const from = nodeMap[e.from];
                 const to = nodeMap[e.to];
@@ -151,7 +231,6 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
                   />
                 );
               })}
-              {/* Nodes */}
               {Object.values(nodeMap).map((node) => (
                 <g key={node.id} className="tree-node-group">
                   <circle
@@ -168,7 +247,7 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="white"
-                    fontSize={node.value > 99 ? '11' : '13'}
+                    fontSize="13"
                     fontWeight="700"
                     fontFamily="inherit"
                   >
@@ -183,7 +262,41 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
         {message && <div className="tree-message">{message}</div>}
       </div>
 
-      {/* Legend for RBT */}
+      {/* Step navigation */}
+      {hasSteps && (
+        <div className="step-nav">
+          <button
+            className="step-btn"
+            onClick={handlePrev}
+            disabled={stepIndex === 0}
+            title="Previous step"
+          >
+            &#8592;
+          </button>
+
+          <button
+            className="step-btn step-btn-play"
+            onClick={handlePlayPause}
+            title={isPlaying ? 'Pause' : atEnd ? 'Replay' : 'Play'}
+          >
+            {isPlaying ? '⏸' : atEnd ? '↺' : '▶'}
+          </button>
+
+          <button
+            className="step-btn"
+            onClick={handleNext}
+            disabled={atEnd}
+            title="Next step"
+          >
+            &#8594;
+          </button>
+
+          <span className="step-counter">
+            {stepIndex + 1} / {steps.length}
+          </span>
+        </div>
+      )}
+
       {treeType === 'rbt' && nodeCount > 0 && (
         <div className="rbt-legend">
           <span className="legend-item">
@@ -198,7 +311,7 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
       )}
 
       <div className="tree-actions">
-        <button className="btn-clear-tree" onClick={clearTree} disabled={isAnimating}>
+        <button className="btn-clear-tree" onClick={clearTree} disabled={isPlaying}>
           Clear Tree
         </button>
       </div>

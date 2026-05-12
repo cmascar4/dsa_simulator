@@ -34,19 +34,20 @@
   border: 2px solid #e0e0ff;
   padding: 20px;
   margin-bottom: 16px;
-  min-height: 220px;
+  height: 440px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   position: relative;
+  overflow: hidden;
 }
 
 .tree-empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 160px;
+  flex: 1;
   width: 100%;
 }
 
@@ -58,9 +59,10 @@
 }
 
 .svg-scroll-wrapper {
+  flex: 1;
   width: 100%;
-  overflow-x: auto;
-  overflow-y: visible;
+  overflow: auto;
+  min-height: 0;
 }
 
 .svg-scroll-wrapper svg {
@@ -114,6 +116,65 @@
 
 .rbt-black {
   background: #37474f;
+}
+
+.step-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.step-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #667eea;
+  border-radius: 50%;
+  background: white;
+  color: #667eea;
+  font-size: 1.1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.step-btn:hover:not(:disabled) {
+  background: #667eea;
+  color: white;
+  transform: scale(1.1);
+}
+
+.step-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.step-btn-play {
+  width: 48px;
+  height: 48px;
+  font-size: 1.2em;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.step-btn-play:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(102, 126, 234, 0.6);
+}
+
+.step-counter {
+  font-size: 0.9em;
+  font-weight: 700;
+  color: #667eea;
+  min-width: 60px;
+  text-align: center;
 }
 
 .tree-actions {
