@@ -31,3 +31,8 @@ yarn-error.log*
 # OS files
 Thumbs.db
 .DS_Store
+
+# ASU intellectual property — do not commit
+/public/sparky.png
+/public/pitchfork.png
+/public/asu-logo.png

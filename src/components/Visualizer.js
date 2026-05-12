@@ -56,7 +56,7 @@ function Visualizer({ arraySize, selectedAlgorithm, isRunning, setIsRunning, spe
   const getBarColor = (index) => {
     if (sorted.includes(index)) return '#4caf50';
     if (comparing.includes(index)) return '#ff9800';
-    return '#667eea';
+    return '#8C1D40';
   };
 
   const getBarHeight = (value) => {

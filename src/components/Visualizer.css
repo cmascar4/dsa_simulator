@@ -7,11 +7,11 @@
 }
 
 .visualizer-container {
-  background: linear-gradient(to bottom, #f5f7ff 0%, #f0f3ff 100%);
+  background: linear-gradient(to bottom, #fff8e7 0%, #fff3d6 100%);
   border-radius: 8px;
   padding: 30px;
   margin-bottom: 30px;
-  border: 2px solid #e0e0ff;
+  border: 2px solid #FFC627;
 }
 
 .bars-container {
@@ -43,18 +43,18 @@
 }
 
 .stat {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
   color: white;
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(140, 29, 64, 0.3);
   transition: transform 0.3s ease;
 }
 
 .stat:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(140, 29, 64, 0.4);
 }
 
 .stat-label {
@@ -87,7 +87,7 @@
 .btn-regenerate {
   width: 100%;
   padding: 12px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -97,12 +97,12 @@
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 15px rgba(140, 29, 64, 0.4);
 }
 
 .btn-regenerate:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  box-shadow: 0 6px 20px rgba(140, 29, 64, 0.6);
 }
 
 .btn-regenerate:active:not(:disabled) {

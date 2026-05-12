@@ -16,7 +16,7 @@
   color: #333;
   margin-bottom: 25px;
   font-size: 1.5em;
-  border-bottom: 3px solid #667eea;
+  border-bottom: 3px solid #8C1D40;
   padding-bottom: 10px;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .control-group .value {
-  color: #667eea;
+  color: #8C1D40;
   font-weight: 700;
 }
 
@@ -50,15 +50,15 @@
 
 .control-group select:hover:not(:disabled),
 .slider:hover:not(:disabled) {
-  border-color: #667eea;
-  box-shadow: 0 0 8px rgba(102, 126, 234, 0.2);
+  border-color: #8C1D40;
+  box-shadow: 0 0 8px rgba(140, 29, 64, 0.2);
 }
 
 .control-group select:focus,
 .slider:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 12px rgba(102, 126, 234, 0.3);
+  border-color: #8C1D40;
+  box-shadow: 0 0 12px rgba(140, 29, 64, 0.3);
 }
 
 .control-group select:disabled,
@@ -98,7 +98,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
   color: white;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
@@ -131,7 +131,7 @@
   color: #333;
   font-size: 1.1em;
   margin-bottom: 15px;
-  color: #667eea;
+  color: #8C1D40;
 }
 
 .info-section ul {
@@ -152,7 +152,7 @@
   content: '→';
   position: absolute;
   left: 0;
-  color: #667eea;
+  color: #8C1D40;
   font-weight: bold;
 }
 
@@ -168,14 +168,14 @@
 }
 
 .tree-input:hover:not(:disabled) {
-  border-color: #667eea;
-  box-shadow: 0 0 8px rgba(102, 126, 234, 0.2);
+  border-color: #8C1D40;
+  box-shadow: 0 0 8px rgba(140, 29, 64, 0.2);
 }
 
 .tree-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 12px rgba(102, 126, 234, 0.3);
+  border-color: #8C1D40;
+  box-shadow: 0 0 12px rgba(140, 29, 64, 0.3);
 }
 
 .tree-input:disabled {
@@ -192,10 +192,10 @@
 .btn-speed {
   flex: 1;
   padding: 10px 0;
-  border: 2px solid #667eea;
+  border: 2px solid #8C1D40;
   border-radius: 6px;
   background: white;
-  color: #667eea;
+  color: #8C1D40;
   font-size: 1em;
   font-weight: 700;
   cursor: pointer;
@@ -203,14 +203,14 @@
 }
 
 .btn-speed:hover:not(:disabled) {
-  background: #f0f3ff;
+  background: #fff3d6;
 }
 
 .btn-speed.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
   color: white;
   border-color: transparent;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.35);
 }
 
 .btn-speed:disabled {
@@ -240,14 +240,14 @@
 }
 
 .btn-insert {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.35);
 }
 
 .btn-insert:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(102, 126, 234, 0.55);
+  box-shadow: 0 6px 18px rgba(140, 29, 64, 0.55);
 }
 
 .btn-search {

@@ -186,8 +186,8 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
       if (node.state === 'path') return node.color === RED ? '#ef9a9a' : '#78909c';
       return node.color === RED ? '#f44336' : '#37474f';
     }
-    if (node.state === 'path') return '#8fa8f5';
-    return '#667eea';
+    if (node.state === 'path') return '#e6a800';
+    return '#8C1D40';
   };
 
   const getStroke = (node) => {
