@@ -1,20 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Visualizer.css';
 import { sortingAlgorithms } from '../algorithms/sortingAlgorithms';
 
-function Visualizer({ arraySize, selectedAlgorithm, isRunning, setIsRunning, speed }) {
+const SPEED_DELAYS = { 1: 1600, 2: 600, 3: 160 };
+
+function Visualizer({ arraySize, selectedAlgorithm, isRunning, setIsRunning, speed, order }) {
   const [array, setArray] = useState([]);
   const [comparing, setComparing] = useState([]);
   const [sorted, setSorted] = useState([]);
   const [stats, setStats] = useState({ comparisons: 0, swaps: 0, iterations: 0 });
   const [isComplete, setIsComplete] = useState(false);
+  const [alreadySorted, setAlreadySorted] = useState(false);
+
+  const arrayRef = useRef([]);
+  const isPausedRef = useRef(false);
+  const isSortingRef = useRef(false);
+  const isCompleteRef = useRef(false);
+
+  useEffect(() => {
+    arrayRef.current = array;
+  }, [array]);
 
   // Initialize array
   useEffect(() => {
     generateNewArray();
-  }, [arraySize]);
+  }, [arraySize]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Allow re-sort when order changes after a completed sort
+  useEffect(() => {
+    if (isCompleteRef.current) {
+      isCompleteRef.current = false;
+      setIsComplete(false);
+      setAlreadySorted(false);
+      setSorted([]);
+    }
+  }, [order]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const generateNewArray = () => {
+    isSortingRef.current = false;
+    isPausedRef.current = false;
+    isCompleteRef.current = false;
     const newArray = Array.from(
       { length: arraySize },
       () => Math.floor(Math.random() * 100) + 1
@@ -24,34 +49,60 @@ function Visualizer({ arraySize, selectedAlgorithm, isRunning, setIsRunning, spe
     setSorted([]);
     setStats({ comparisons: 0, swaps: 0, iterations: 0 });
     setIsComplete(false);
+    setAlreadySorted(false);
   };
 
-  // Run sorting algorithm
+  // Handle play / pause / resume
   useEffect(() => {
-    if (!isRunning || array.length === 0) return;
+    if (isRunning) {
+      if (isSortingRef.current) {
+        // Resume
+        isPausedRef.current = false;
+      } else {
+        // Start new sort — regenerate array if previous run already completed
+        if (isCompleteRef.current) {
+          setAlreadySorted(true);
+          setTimeout(() => setAlreadySorted(false), 2500);
+          setIsRunning(false);
+          return;
+        }
+        isPausedRef.current = false;
+        isSortingRef.current = true;
 
-    const runSort = async () => {
-      const algorithm = sortingAlgorithms[selectedAlgorithm];
-      if (!algorithm) return;
+        const algorithm = sortingAlgorithms[selectedAlgorithm];
+        if (!algorithm) return;
 
-      await algorithm(
-        [...array],
-        (comparing, sorted, stats) => {
-          setComparing(comparing);
-          setSorted(sorted);
-          setStats(stats);
-        },
-        speed
-      );
+        const delay = SPEED_DELAYS[speed] ?? 300;
+        const initialArray = [...arrayRef.current];
 
-      setComparing([]);
-      setSorted(Array.from({ length: array.length }, (_, i) => i));
-      setIsRunning(false);
-      setIsComplete(true);
-    };
-
-    runSort();
-  }, [isRunning, array, selectedAlgorithm, speed]);
+        algorithm(
+          initialArray,
+          (comparingIndices, sortedIndices, newStats, currentArray) => {
+            if (currentArray) setArray([...currentArray]);
+            setComparing(comparingIndices);
+            setSorted(sortedIndices);
+            setStats(newStats);
+          },
+          delay,
+          isPausedRef,
+          order
+        ).then(() => {
+          isSortingRef.current = false;
+          isPausedRef.current = false;
+          isCompleteRef.current = true;
+          setComparing([]);
+          setSorted(Array.from({ length: arrayRef.current.length }, (_, i) => i));
+          setIsRunning(false);
+          setIsComplete(true);
+        });
+      }
+    } else {
+      // Pause
+      if (isSortingRef.current) {
+        isPausedRef.current = true;
+      }
+    }
+  }, [isRunning]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getBarColor = (index) => {
     if (sorted.includes(index)) return '#4caf50';
@@ -59,12 +110,16 @@ function Visualizer({ arraySize, selectedAlgorithm, isRunning, setIsRunning, spe
     return '#8C1D40';
   };
 
-  const getBarHeight = (value) => {
-    return (value / 100) * 100;
-  };
+  const getBarHeight = (value) => (value / 100) * 100;
 
   return (
     <div className="visualizer">
+      {alreadySorted && (
+        <div className="completion-message already-sorted">
+          Array is already sorted. Generate a new array to sort again.
+        </div>
+      )}
+
       <div className="visualizer-container">
         <div className="bars-container">
           {array.map((value, index) => (
@@ -96,7 +151,7 @@ function Visualizer({ arraySize, selectedAlgorithm, isRunning, setIsRunning, spe
         </div>
       </div>
 
-      {isComplete && (
+      {isComplete && !alreadySorted && (
         <div className="completion-message">
           ✓ Sorting Complete!
         </div>

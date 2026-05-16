@@ -84,6 +84,10 @@
   animation: slideDown 0.3s ease-out;
 }
 
+.already-sorted {
+  background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
+}
+
 .btn-regenerate {
   width: 100%;
   padding: 12px 20px;

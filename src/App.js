@@ -7,10 +7,11 @@ import Controls from './components/Controls';
 const TREE_ALGORITHMS = ['bst', 'rbt'];
 
 function App() {
-  const [arraySize, setArraySize] = useState(20);
+  const [arraySize, setArraySize] = useState(6);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('bubble');
   const [isRunning, setIsRunning] = useState(false);
   const [speed, setSpeed] = useState(2);
+  const [order, setOrder] = useState('asc');
   const [treeOperation, setTreeOperation] = useState(null);
 
   const isTreeMode = TREE_ALGORITHMS.includes(selectedAlgorithm);
@@ -50,6 +51,8 @@ function App() {
           setIsRunning={setIsRunning}
           speed={speed}
           setSpeed={setSpeed}
+          order={order}
+          setOrder={setOrder}
           onTreeOperation={handleTreeOperation}
         />
 
@@ -67,6 +70,7 @@ function App() {
             isRunning={isRunning}
             setIsRunning={setIsRunning}
             speed={speed}
+            order={order}
           />
         )}
       </main>

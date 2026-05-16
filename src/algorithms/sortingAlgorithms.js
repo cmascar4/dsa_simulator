@@ -1,94 +1,101 @@
-// Utility function to create delay based on speed
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const sleepPauseable = async (ms, isPausedRef) => {
+  await sleep(ms);
+  while (isPausedRef && isPausedRef.current) {
+    await sleep(50);
+  }
+};
+
+// order: 'asc' | 'desc'
+const shouldSwap = (a, b, order) => order === 'asc' ? a > b : a < b;
 
 // Bubble Sort
-export const bubbleSort = async (array, onUpdate, speed) => {
+export const bubbleSort = async (array, onUpdate, delay, isPausedRef, order = 'asc') => {
   let arr = [...array];
   let comparisons = 0;
   let swaps = 0;
   let iterations = 0;
-  const delay = 101 - speed / 5;
 
   for (let i = 0; i < arr.length; i++) {
+    let swappedThisPass = false;
     for (let j = 0; j < arr.length - i - 1; j++) {
       comparisons++;
       iterations++;
 
-      onUpdate([j, j + 1], [], { comparisons, swaps, iterations });
-      await sleep(delay);
+      onUpdate([j, j + 1], [], { comparisons, swaps, iterations }, arr);
+      await sleepPauseable(delay, isPausedRef);
 
-      if (arr[j] > arr[j + 1]) {
+      if (shouldSwap(arr[j], arr[j + 1], order)) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
         swaps++;
+        swappedThisPass = true;
       }
 
-      onUpdate([j, j + 1], [], { comparisons, swaps, iterations });
-      await sleep(delay / 2);
+      onUpdate([j, j + 1], [], { comparisons, swaps, iterations }, arr);
+      await sleepPauseable(delay / 2, isPausedRef);
     }
+    if (!swappedThisPass) break;
   }
 
   return arr;
 };
 
 // Selection Sort
-export const selectionSort = async (array, onUpdate, speed) => {
+export const selectionSort = async (array, onUpdate, delay, isPausedRef, order = 'asc') => {
   let arr = [...array];
   let comparisons = 0;
   let swaps = 0;
   let iterations = 0;
-  const delay = 101 - speed / 5;
 
   for (let i = 0; i < arr.length; i++) {
-    let minIndex = i;
+    let targetIndex = i;
     iterations++;
 
     for (let j = i + 1; j < arr.length; j++) {
       comparisons++;
       iterations++;
 
-      onUpdate([i, j], [], { comparisons, swaps, iterations });
-      await sleep(delay);
+      onUpdate([i, j], [], { comparisons, swaps, iterations }, arr);
+      await sleepPauseable(delay, isPausedRef);
 
-      if (arr[j] < arr[minIndex]) {
-        minIndex = j;
+      if (shouldSwap(arr[targetIndex], arr[j], order)) {
+        targetIndex = j;
       }
     }
 
-    if (minIndex !== i) {
-      [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+    if (targetIndex !== i) {
+      [arr[i], arr[targetIndex]] = [arr[targetIndex], arr[i]];
       swaps++;
     }
 
     onUpdate([i], Array.from({ length: i + 1 }, (_, idx) => idx), {
-      comparisons,
-      swaps,
-      iterations,
-    });
-    await sleep(delay / 2);
+      comparisons, swaps, iterations,
+    }, arr);
+    await sleepPauseable(delay / 2, isPausedRef);
   }
 
   return arr;
 };
 
 // Insertion Sort
-export const insertionSort = async (array, onUpdate, speed) => {
+export const insertionSort = async (array, onUpdate, delay, isPausedRef, order = 'asc') => {
   let arr = [...array];
   let comparisons = 0;
   let swaps = 0;
   let iterations = 0;
-  const delay = 101 - speed / 5;
 
   for (let i = 1; i < arr.length; i++) {
     let key = arr[i];
     let j = i - 1;
     iterations++;
 
-    while (j >= 0 && arr[j] > key) {
+    while (j >= 0 && shouldSwap(arr[j], key, order)) {
       comparisons++;
       iterations++;
 
-      onUpdate([j, i], [], { comparisons, swaps, iterations });
-      await sleep(delay);
+      onUpdate([j, i], [], { comparisons, swaps, iterations }, arr);
+      await sleepPauseable(delay, isPausedRef);
 
       arr[j + 1] = arr[j];
       j--;
@@ -98,23 +105,20 @@ export const insertionSort = async (array, onUpdate, speed) => {
     arr[j + 1] = key;
 
     onUpdate([], Array.from({ length: i + 1 }, (_, idx) => idx), {
-      comparisons,
-      swaps,
-      iterations,
-    });
-    await sleep(delay / 2);
+      comparisons, swaps, iterations,
+    }, arr);
+    await sleepPauseable(delay / 2, isPausedRef);
   }
 
   return arr;
 };
 
 // Merge Sort
-export const mergeSort = async (array, onUpdate, speed) => {
+export const mergeSort = async (array, onUpdate, delay, isPausedRef, order = 'asc') => {
   let arr = [...array];
   let comparisons = 0;
   let swaps = 0;
   let iterations = 0;
-  const delay = 101 - speed / 5;
 
   const merge = async (left, mid, right) => {
     let leftArr = arr.slice(left, mid + 1);
@@ -127,10 +131,10 @@ export const mergeSort = async (array, onUpdate, speed) => {
       comparisons++;
       iterations++;
 
-      onUpdate([left + i, mid + 1 + j], [], { comparisons, swaps, iterations });
-      await sleep(delay);
+      onUpdate([left + i, mid + 1 + j], [], { comparisons, swaps, iterations }, arr);
+      await sleepPauseable(delay, isPausedRef);
 
-      if (leftArr[i] <= rightArr[j]) {
+      if (!shouldSwap(leftArr[i], rightArr[j], order)) {
         arr[k] = leftArr[i];
         i++;
       } else {
@@ -141,21 +145,8 @@ export const mergeSort = async (array, onUpdate, speed) => {
       k++;
     }
 
-    while (i < leftArr.length) {
-      arr[k] = leftArr[i];
-      i++;
-      k++;
-      swaps++;
-      iterations++;
-    }
-
-    while (j < rightArr.length) {
-      arr[k] = rightArr[j];
-      j++;
-      k++;
-      swaps++;
-      iterations++;
-    }
+    while (i < leftArr.length) { arr[k++] = leftArr[i++]; swaps++; iterations++; }
+    while (j < rightArr.length) { arr[k++] = rightArr[j++]; swaps++; iterations++; }
   };
 
   const mergeSortHelper = async (left, right) => {
@@ -172,12 +163,11 @@ export const mergeSort = async (array, onUpdate, speed) => {
 };
 
 // Quick Sort
-export const quickSort = async (array, onUpdate, speed) => {
+export const quickSort = async (array, onUpdate, delay, isPausedRef, order = 'asc') => {
   let arr = [...array];
   let comparisons = 0;
   let swaps = 0;
   let iterations = 0;
-  const delay = 101 - speed / 5;
 
   const partition = async (low, high) => {
     let pivot = arr[high];
@@ -188,10 +178,10 @@ export const quickSort = async (array, onUpdate, speed) => {
       comparisons++;
       iterations++;
 
-      onUpdate([i + 1, j], [], { comparisons, swaps, iterations });
-      await sleep(delay);
+      onUpdate([i + 1, j], [], { comparisons, swaps, iterations }, arr);
+      await sleepPauseable(delay, isPausedRef);
 
-      if (arr[j] < pivot) {
+      if (!shouldSwap(arr[j], pivot, order)) {
         i++;
         [arr[i], arr[j]] = [arr[j], arr[i]];
         swaps++;

@@ -22,6 +22,8 @@ function Controls({
   setIsRunning,
   speed,
   setSpeed,
+  order,
+  setOrder,
   onTreeOperation,
 }) {
   const [treeValue, setTreeValue] = useState('');
@@ -137,14 +139,16 @@ function Controls({
             </div>
 
             <div className="info-section">
-              <h3>Instructions</h3>
+              <h3>How to use</h3>
               <ul>
-                <li>Enter a number (1–99)</li>
-                <li>Click Insert to add to the tree</li>
-                <li>Click Search to find a value</li>
-                {selectedAlgorithm === 'bst' && <li>Click Delete to remove a value</li>}
-                <li>Watch each step explained live</li>
-                <li>Use Clear Tree to start over</li>
+                <li>Type a value (1–99) and press <strong>Insert</strong></li>
+                <li>Use <strong>Search</strong> to trace a value through the tree</li>
+                {selectedAlgorithm === 'bst' && <li>Use <strong>Delete</strong> to remove a node</li>}
+                <li>Each step is explained in the message bar</li>
+                <li>Use ← → arrows to step through manually</li>
+                <li>Hit ▶ to replay, ⏸ to pause mid-animation</li>
+                <li>Select a speed — 1 slow, 2 medium, 3 fast</li>
+                <li>Hit <strong>Clear Tree</strong> to start fresh</li>
               </ul>
             </div>
           </>
@@ -157,8 +161,8 @@ function Controls({
               <input
                 id="array-size"
                 type="range"
-                min="5"
-                max="150"
+                min="2"
+                max="8"
                 value={arraySize}
                 onChange={(e) => setArraySize(Number(e.target.value))}
                 disabled={isRunning}
@@ -167,19 +171,39 @@ function Controls({
             </div>
 
             <div className="control-group">
-              <label htmlFor="speed">
-                Speed: <span className="value">{speed}%</span>
-              </label>
-              <input
-                id="speed"
-                type="range"
-                min="10"
-                max="500"
-                value={speed}
-                onChange={(e) => setSpeed(Number(e.target.value))}
-                step="10"
-                className="slider"
-              />
+              <label>Speed:</label>
+              <div className="speed-buttons">
+                {[1, 2, 3].map((s) => (
+                  <button
+                    key={s}
+                    className={`btn btn-speed ${speed === s ? 'active' : ''}`}
+                    onClick={() => setSpeed(s)}
+                    disabled={isRunning}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="control-group">
+              <label>Order:</label>
+              <div className="speed-buttons">
+                <button
+                  className={`btn btn-speed ${order === 'asc' ? 'active' : ''}`}
+                  onClick={() => setOrder('asc')}
+                  disabled={isRunning}
+                >
+                  ↑ Asc
+                </button>
+                <button
+                  className={`btn btn-speed ${order === 'desc' ? 'active' : ''}`}
+                  onClick={() => setOrder('desc')}
+                  disabled={isRunning}
+                >
+                  ↓ Desc
+                </button>
+              </div>
             </div>
 
             <div className="button-group">
@@ -187,18 +211,21 @@ function Controls({
                 className={`btn btn-primary ${isRunning ? 'running' : ''}`}
                 onClick={() => setIsRunning(!isRunning)}
               >
-                {isRunning ? 'Pause' : 'Start Sorting'}
+                {isRunning ? 'Pause' : 'Start / Resume'}
               </button>
             </div>
 
             <div className="info-section">
-              <h3>Instructions</h3>
+              <h3>How to use</h3>
               <ul>
-                <li>Select a sorting algorithm</li>
-                <li>Adjust the array size</li>
-                <li>Set the visualization speed</li>
-                <li>Click "Start Sorting" to begin</li>
-                <li>Watch the algorithm in action!</li>
+                <li>Pick an algorithm from the dropdown</li>
+                <li>Drag the slider to set array size (2–8)</li>
+                <li>Choose ↑ Asc or ↓ Desc order</li>
+                <li>Select a speed — 1 slow, 2 medium, 3 fast</li>
+                <li>Hit <strong>Start / Resume</strong> to run</li>
+                <li>Hit <strong>Pause</strong> to freeze mid-sort</li>
+                <li>Orange bars are being compared, green are sorted</li>
+                <li>Click <strong>Generate New Array</strong> to reset</li>
               </ul>
             </div>
           </>
