@@ -141,14 +141,10 @@ function Controls({
             <div className="info-section">
               <h3>How to use</h3>
               <ul>
-                <li>Type a value (1–99) and press <strong>Insert</strong></li>
-                <li>Use <strong>Search</strong> to trace a value through the tree</li>
-                {selectedAlgorithm === 'bst' && <li>Use <strong>Delete</strong> to remove a node</li>}
-                <li>Each step is explained in the message bar</li>
-                <li>Use ← → arrows to step through manually</li>
-                <li>Hit ▶ to replay, ⏸ to pause mid-animation</li>
-                <li>Select a speed — 1 slow, 2 medium, 3 fast</li>
-                <li>Hit <strong>Clear Tree</strong> to start fresh</li>
+                <li>Enter a value (1–99) → <strong>Insert / Search{selectedAlgorithm === 'bst' ? ' / Delete' : ''}</strong></li>
+                <li>← → to step manually &nbsp;·&nbsp; ▶⏸ to play/pause</li>
+                <li>Speed: 1 slow &nbsp;·&nbsp; 2 medium &nbsp;·&nbsp; 3 fast</li>
+                <li><strong>Clear Tree</strong> to start over</li>
               </ul>
             </div>
           </>
@@ -218,14 +214,10 @@ function Controls({
             <div className="info-section">
               <h3>How to use</h3>
               <ul>
-                <li>Pick an algorithm from the dropdown</li>
-                <li>Drag the slider to set array size (2–8)</li>
-                <li>Choose ↑ Asc or ↓ Desc order</li>
-                <li>Select a speed — 1 slow, 2 medium, 3 fast</li>
-                <li>Hit <strong>Start / Resume</strong> to run</li>
-                <li>Hit <strong>Pause</strong> to freeze mid-sort</li>
-                <li>Orange bars are being compared, green are sorted</li>
-                <li>Click <strong>Generate New Array</strong> to reset</li>
+                <li>Set size, order & speed, then hit <strong>Start</strong></li>
+                <li>Orange = comparing &nbsp;·&nbsp; Green = sorted</li>
+                <li><strong>Pause</strong> mid-sort, <strong>Resume</strong> to continue</li>
+                <li><strong>Generate</strong> resets with a new array</li>
               </ul>
             </div>
           </>
