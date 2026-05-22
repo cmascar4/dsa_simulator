@@ -1,39 +1,41 @@
 .tree-visualizer {
   background: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
   animation: slideUp 0.5s ease-out;
+  border-top: 4px solid #FFC627;
 }
 
 .tree-info-bar {
   background: linear-gradient(135deg, #fff8e7 0%, #fff3d6 100%);
-  border: 1.5px solid #FFC627;
+  border: 1.5px solid rgba(255, 198, 39, 0.5);
+  border-left: 4px solid #FFC627;
   border-radius: 8px;
-  padding: 14px 18px;
-  margin-bottom: 20px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
 }
 
 .tree-info-complexity {
-  font-size: 0.9em;
-  font-weight: 700;
+  font-size: 0.85em;
+  font-weight: 800;
   color: #8C1D40;
-  margin-bottom: 4px;
-  letter-spacing: 0.2px;
+  margin-bottom: 3px;
+  letter-spacing: 0.1px;
 }
 
 .tree-info-desc {
-  font-size: 0.88em;
-  color: #555;
+  font-size: 0.83em;
+  color: #666;
   line-height: 1.5;
 }
 
 .tree-container {
-  background: linear-gradient(to bottom, #fff8e7 0%, #fff3d6 100%);
-  border-radius: 8px;
-  border: 2px solid #FFC627;
+  background: linear-gradient(180deg, #1a0a0f 0%, #2d0e1c 100%);
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 198, 39, 0.2);
   padding: 20px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   height: 440px;
   display: flex;
   flex-direction: column;
@@ -45,15 +47,17 @@
 
 .tree-empty {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1;
   width: 100%;
+  gap: 10px;
 }
 
 .tree-empty p {
-  color: #999;
-  font-size: 1em;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.95em;
   text-align: center;
   font-style: italic;
 }
@@ -74,49 +78,46 @@
 }
 
 .tree-message {
-  margin-top: 14px;
+  margin-top: 12px;
   background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
   color: white;
-  padding: 10px 18px;
+  padding: 9px 16px;
   border-radius: 6px;
-  font-size: 0.95em;
+  font-size: 0.9em;
   font-weight: 600;
   text-align: center;
-  min-width: 300px;
+  min-width: 260px;
   animation: fadeIn 0.2s ease-out;
+  box-shadow: 0 3px 10px rgba(140, 29, 64, 0.4);
+  letter-spacing: 0.1px;
 }
 
 .rbt-legend {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   justify-content: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.88em;
+  gap: 7px;
+  font-size: 0.84em;
   color: #555;
   font-weight: 600;
 }
 
 .legend-dot {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   display: inline-block;
-  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  border: 1.5px solid rgba(0, 0, 0, 0.15);
 }
 
-.rbt-red {
-  background: #f44336;
-}
-
-.rbt-black {
-  background: #37474f;
-}
+.rbt-red   { background: #f44336; }
+.rbt-black { background: #37474f; }
 
 .step-nav {
   display: flex;
@@ -127,13 +128,13 @@
 }
 
 .step-btn {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border: 2px solid #8C1D40;
   border-radius: 50%;
   background: white;
   color: #8C1D40;
-  font-size: 1.1em;
+  font-size: 1.05em;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -150,14 +151,14 @@
 }
 
 .step-btn:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .step-btn-play {
-  width: 48px;
-  height: 48px;
-  font-size: 1.2em;
+  width: 46px;
+  height: 46px;
+  font-size: 1.15em;
   background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
   color: white;
   border: none;
@@ -170,11 +171,15 @@
 }
 
 .step-counter {
-  font-size: 0.9em;
+  font-size: 0.85em;
   font-weight: 700;
   color: #8C1D40;
-  min-width: 60px;
+  min-width: 56px;
   text-align: center;
+  background: #fff3d6;
+  padding: 4px 8px;
+  border-radius: 20px;
+  border: 1px solid #FFC627;
 }
 
 .tree-actions {
@@ -183,46 +188,41 @@
 }
 
 .btn-clear-tree {
-  padding: 10px 24px;
+  padding: 9px 22px;
   background: linear-gradient(135deg, #8C1D40 0%, #6B1530 100%);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 0.95em;
-  font-weight: 600;
+  border-radius: 8px;
+  font-size: 0.88em;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.3px;
-  box-shadow: 0 4px 15px rgba(140, 29, 64, 0.3);
+  transition: all 0.2s ease;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  box-shadow: 0 3px 12px rgba(140, 29, 64, 0.3);
 }
 
 .btn-clear-tree:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 5px 18px rgba(140, 29, 64, 0.5);
 }
 
 .btn-clear-tree:disabled {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 768px) {
-  .tree-visualizer {
-    padding: 20px;
-  }
-
-  .tree-message {
-    min-width: unset;
-    width: 100%;
-  }
+  .tree-visualizer { padding: 18px; }
+  .tree-message { min-width: unset; width: 100%; }
 }

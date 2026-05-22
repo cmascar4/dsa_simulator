@@ -123,15 +123,16 @@ function Visualizer({ arraySize, selectedAlgorithm, isRunning, setIsRunning, spe
       <div className="visualizer-container">
         <div className="bars-container">
           {array.map((value, index) => (
-            <div
-              key={index}
-              className="bar"
-              style={{
-                height: `${getBarHeight(value)}%`,
-                backgroundColor: getBarColor(index),
-                transition: 'all 0.05s ease',
-              }}
-            />
+            <div key={index} className="bar-wrapper">
+              <span className="bar-label">{value}</span>
+              <div
+                className="bar"
+                style={{
+                  height: `${getBarHeight(value)}%`,
+                  backgroundColor: getBarColor(index),
+                }}
+              />
+            </div>
           ))}
         </div>
       </div>

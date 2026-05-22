@@ -186,7 +186,7 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
       if (node.state === 'path') return node.color === RED ? '#ef9a9a' : '#78909c';
       return node.color === RED ? '#f44336' : '#37474f';
     }
-    if (node.state === 'path') return '#e6a800';
+    if (node.state === 'path') return '#FFC627';
     return '#8C1D40';
   };
 
@@ -226,7 +226,7 @@ function TreeVisualizer({ treeType, operation, onOperationComplete, speed }) {
                     y1={from.y}
                     x2={to.x}
                     y2={to.y}
-                    stroke="#bbb"
+                    stroke="rgba(255,255,255,0.25)"
                     strokeWidth="2"
                   />
                 );

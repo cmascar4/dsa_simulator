@@ -8,9 +8,9 @@ body {
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #8C1D40 0%, #4a0e22 100%);
+  background: linear-gradient(160deg, #8C1D40 0%, #6B1530 50%, #3d0b1c 100%);
   min-height: 100vh;
-  padding: 20px;
+  padding: 28px 20px;
 }
 
 code {
@@ -20,6 +20,6 @@ code {
 #root {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
 }
